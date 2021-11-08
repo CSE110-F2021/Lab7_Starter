@@ -12,6 +12,7 @@ const recipes = [
 ];
 const recipeData = {}; // You can access all of the Recipe Data from the JSON files in this variable
 
+// TODO - Part 1
 const router = new Router(function () {
   /**
    * TODO - Part 1
@@ -20,10 +21,12 @@ const router = new Router(function () {
    * which was given to you in the CSS. Simply add / remove this class to the corresponding <section>
    * elements to display / hide that section. Everything is hidden by default. Make sure that you
    * are removing any "shown" classes on <sections> you don't want to display, this home method should
-   * be called more than just at the start. You should only really need two lines for this function.
+   * be called more than just t the start. You should only really need two lines for this function.
    */
   const shownCards = document.querySelector(".section--recipe-cards");
   shownCards.classList.add("shown");
+  const cardExpand = document.querySelector(".section--recipe-expand");
+  cardExpand.classList.remove("shown");
 });
 
 window.addEventListener("DOMContentLoaded", init);
@@ -56,6 +59,8 @@ async function init() {
  * Detects if there's a service worker, then loads it and begins the process
  * of installing it and getting it running
  */
+
+// TODO - Part 2
 function initializeServiceWorker() {
   /**
    *  TODO - Part 2
@@ -93,6 +98,8 @@ async function fetchRecipes() {
  * Generates the <recipe-card> elements from the fetched recipes and
  * appends them to the page
  */
+
+// TODO - Part 1
 function createRecipeCards() {
   for (let i = 0; i < recipes.length; i++) {
     const recipeCard = document.createElement("recipe-card");
@@ -111,16 +118,19 @@ function createRecipeCards() {
      * Again - the functions here should be swapping around the "shown" class only, simply
      * add this class to the correct <section> to display that section
      */
-    recipeCard.addEventListener("click", () => {
-      const pageName = recipeData[recipes[i]]["page-name"];
-      router.addPage(pageName, function () {
-        bindRecipeCard(recipeCard, pageName);
-      });
-      // router.navigate(pageName, false);
-      // bindRecipeCard(recipeCard, pageName);
+    const menu = recipeData[recipes[i]]["page-name"];
 
-      // recipes[i];
+    router.addPage(menu, function () {
+      const recipeDetail = document.querySelector("recipe-expand");
+      recipeDetail.data =
+        recipeData[recipes.filter((recipe) => recipe.includes(menu))];
+
+      const recipeExpand = document.querySelector(".section--recipe-expand");
+      const recipeCards = document.querySelector(".section--recipe-cards");
+      recipeExpand.classList.add("shown");
+      recipeCards.classList.remove("shown");
     });
+    bindRecipeCard(recipeCard, menu);
 
     if (i >= 3) recipeCard.classList.add("hidden");
     document.querySelector(".recipe-cards--wrapper").appendChild(recipeCard);
@@ -162,40 +172,34 @@ function bindShowMore() {
  *                             listeners to
  * @param {String} pageName the name of the page to navigate to on click
  */
+
+// TODO - Part 1
 function bindRecipeCard(recipeCard, pageName) {
   /**
    * TODO - Part 1
    * Fill in this function as specified in the comment above
    */
-
   recipeCard.addEventListener("click", function () {
-    // const url = `index.html#${pageName}`;
-    // history.pushState({ page: `${pageName}` }, pageName, url);
-
-    const recipeDetail = document.querySelector("recipe-expand");
-    recipeDetail.data =
-      recipeData[recipes.filter((recipe) => recipe.includes(pageName))];
-
-    // router.navigate(pageName, bindPopstate);
-    const recipeCards = document.querySelector(".section--recipe-cards");
-    recipeCards.classList.remove("shown");
-    const recipeExpand = document.querySelector(".section--recipe-expand");
-    recipeExpand.classList.add("shown");
+    router.navigate(pageName);
   });
-
-  // history.pushState({ page: 1 }, "title 1", pageName);
-  // history.pushState( page, "", window.location.origin + window.location.pathname + hash);
 }
 
 /**
  * Binds the 'keydown' event listener to the Escape key (esc) such that when
  * it is clicked, the home page is returned to
  */
+
+// TODO - Part 1
 function bindEscKey() {
   /**
    * TODO - Part 1
    * Fill in this function as specified in the comment above
    */
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      router.navigate("home", false);
+    }
+  });
 }
 
 /**
@@ -205,9 +209,15 @@ function bindEscKey() {
  * in your Router when you push your state so you can access that page
  * info in your popstate function)
  */
+
+// TODO - Part 1
 function bindPopstate() {
   /**
    * TODO - Part 1
    * Fill in this function as specified in the comment above
    */
+  window.addEventListener("popstate", (e) => {
+    if (e.state === null) router.navigate("home", true);
+    else router.navigate(e.state.page, true);
+  });
 }

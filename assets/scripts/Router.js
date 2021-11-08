@@ -19,12 +19,14 @@ export class Router {
    * @param {Function} homeFunc The function to run to set the home route
    *                            visually
    */
+
+  // TODO - Part1
   constructor(homeFunc) {
     /**
      * TODO Part 1
      * Fill in this function as specified in the comment above
      */
-    this.homeFunc = homeFunc();
+    this["home"] = homeFunc;
   }
 
   /**
@@ -35,15 +37,12 @@ export class Router {
    * @param {Function} pageFunc The function to run when the page is called
    */
   addPage(page, pageFunc) {
+    // TODO - Part 1
     /**
      * TODO Part 1
      * Fill in this function as specified in the comment above
      */
-    window.location.hash = page;
-
     this[page] = pageFunc;
-
-    console.log(window.location.hash);
   }
 
   /**
@@ -54,21 +53,18 @@ export class Router {
    *                              'popstate' event instead of a normal card click
    */
   navigate(page, statePopped) {
+    // TODO - Part 1
     /**
      * TODO Part 1
      * Fill in this function as specified in the comment above
      */
-
-    //back or forward?
-    if (!statePopped) {
-      console.log(window.location.hash);
-      console.log(window.location.pathname);
-    } else {
+    let url;
+    if (statePopped !== true) {
+      if (page === "home") url = "index.html";
+      else url = `index.html#${page}`;
+      history.pushState({ page: `${page}` }, page, url);
     }
 
-    // var old = window.location.href;
-    // console.log(old);
-    // var newLocation  = old+page;
-    // window.location.replace(window.location.href);
+    this[page]();
   }
 }
