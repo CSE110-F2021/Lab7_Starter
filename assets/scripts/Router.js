@@ -40,7 +40,10 @@ export class Router {
      * Fill in this function as specified in the comment above
      */
     window.location.hash = page;
+
     this[page] = pageFunc;
+
+    console.log(window.location.hash);
   }
 
   /**
@@ -55,9 +58,17 @@ export class Router {
      * TODO Part 1
      * Fill in this function as specified in the comment above
      */
-    console.log(page);
-    var window.location;
-    var newLocation = 
-    // window.location.replace(page);
+
+    //back or forward?
+    if (!statePopped) {
+      console.log(window.location.hash);
+      console.log(window.location.pathname);
+    } else {
+    }
+
+    // var old = window.location.href;
+    // console.log(old);
+    // var newLocation  = old+page;
+    // window.location.replace(window.location.href);
   }
 }

@@ -112,8 +112,14 @@ function createRecipeCards() {
      * add this class to the correct <section> to display that section
      */
     recipeCard.addEventListener("click", () => {
-      router.addPage(recipeData[recipes[i]]["page-name"]);
-      bindRecipeCard(recipeCard, recipeData[recipes[i]]["page-name"]);
+      const pageName = recipeData[recipes[i]]["page-name"];
+      router.addPage(pageName, function () {
+        bindRecipeCard(recipeCard, pageName);
+      });
+      // router.navigate(pageName, false);
+      // bindRecipeCard(recipeCard, pageName);
+
+      // recipes[i];
     });
 
     if (i >= 3) recipeCard.classList.add("hidden");
@@ -161,7 +167,24 @@ function bindRecipeCard(recipeCard, pageName) {
    * TODO - Part 1
    * Fill in this function as specified in the comment above
    */
-  router.navigate(pageName);
+
+  recipeCard.addEventListener("click", function () {
+    // const url = `index.html#${pageName}`;
+    // history.pushState({ page: `${pageName}` }, pageName, url);
+
+    const recipeDetail = document.querySelector("recipe-expand");
+    recipeDetail.data =
+      recipeData[recipes.filter((recipe) => recipe.includes(pageName))];
+
+    // router.navigate(pageName, bindPopstate);
+    const recipeCards = document.querySelector(".section--recipe-cards");
+    recipeCards.classList.remove("shown");
+    const recipeExpand = document.querySelector(".section--recipe-expand");
+    recipeExpand.classList.add("shown");
+  });
+
+  // history.pushState({ page: 1 }, "title 1", pageName);
+  // history.pushState( page, "", window.location.origin + window.location.pathname + hash);
 }
 
 /**
